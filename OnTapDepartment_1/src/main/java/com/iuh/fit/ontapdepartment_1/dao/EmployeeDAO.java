@@ -23,17 +23,19 @@ public class EmployeeDAO {
 
         try (Connection connection = dbUtil.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery();
         ) {
             statement.setInt(1, id);
-            while (resultSet.next()) {
-                return Employee
-                        .builder()
-                        .id(resultSet.getInt("id"))
-                        .name(resultSet.getString("name"))
-                        .salary(resultSet.getInt("salary"))
-                        .departmentId(resultSet.getInt("department_id"))
-                        .build();
+            try (ResultSet resultSet = statement.executeQuery()) {
+
+                while (resultSet.next()) {
+                    return Employee
+                            .builder()
+                            .id(resultSet.getInt("id"))
+                            .name(resultSet.getString("name"))
+                            .salary(resultSet.getInt("salary"))
+                            .departmentId(resultSet.getInt("department_id"))
+                            .build();
+                }
             }
 
         } catch (SQLException e) {

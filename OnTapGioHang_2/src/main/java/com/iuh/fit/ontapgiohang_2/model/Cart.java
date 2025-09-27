@@ -1,6 +1,7 @@
 package com.iuh.fit.ontapgiohang_2.model;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -10,12 +11,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Cart {
-    private List<CartItem> cartItems;
+    private List<CartItem> cartItems = new ArrayList<>();
 
     public void addItem(Product product) {
         for (CartItem cartItem : cartItems) {
             if(cartItem.getProduct().getId() == product.getId()) {
                 cartItem.setQuantity(cartItem.getQuantity() + 1);
+                return;
             }
         }
         cartItems.add(new CartItem(product, 1));
@@ -41,5 +43,9 @@ public class Cart {
             totalPrice += cartItem.getSubTotal();
         }
         return totalPrice;
+    }
+
+    public void clear(){
+        cartItems.clear();
     }
 }
